@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Private Chat - Connect</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+        .container {
+            text-align: center;
+            padding: 2rem;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            backdrop-filter: blur(10px);
+            max-width: 400px;
+        }
+        h1 { margin: 0 0 1rem 0; }
+        .button {
+            display: inline-block;
+            padding: 12px 24px;
+            margin: 10px;
+            background: white;
+            color: #667eea;
+            text-decoration: none;
+            border-radius: 8px;
+            font-weight: bold;
+            transition: transform 0.2s;
+        }
+        .button:hover {
+            transform: scale(1.05);
+        }
+        .info {
+            margin-top: 2rem;
+            font-size: 0.9rem;
+            opacity: 0.9;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🔗 Connection Request</h1>
+        <p>Someone wants to connect with you on Private Chat!</p>
+        
+        <a href="#" id="openApp" class="button">Open Private Chat</a>
+        
+        <div class="info">
+            <p>Don't have the app? Download it first!</p>
+        </div>
+    </div>
+
+    <script>
+        // Get UID from URL parameter
+        const urlParams = new URLSearchParams(window.location.search);
+        const uid = urlParams.get('uid');
+        
+        if (uid) {
+            const deepLink = `privatechat://connect?uid=${uid}`;
+            
+            // Set the button link
+            document.getElementById('openApp').href = deepLink;
+            
+            // Auto-redirect on mobile
+            if (/Android|iPhone|iPad|iPod/i.test(navigator.userAgent)) {
+                // Try to open the app
+                window.location.href = deepLink;
+                
+                // Fallback: if app doesn't open in 2 seconds, show the page
+                setTimeout(() => {
+                    // User is still here, app probably not installed
+                    console.log('App not installed or failed to open');
+                }, 2000);
+            }
+        } else {
+            document.querySelector('.container').innerHTML = 
+                '<h1>❌ Invalid Link</h1><p>This connection link is missing required information.</p>';
+        }
+    </script>
+</body>
+</html>
